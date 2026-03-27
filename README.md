@@ -1,49 +1,81 @@
-# Blockchain Network Project Documentation
+# DevAssist AI - AI Coding Assistant
 
-## Architecture Overview
-This project is designed to implement a blockchain network featuring several key components:
-- **Wallet:** A component allowing users to create and manage their cryptocurrency wallets.
-- **Validators:** Nodes that validate transactions and blocks, contributing to the network's security.
-- **P2P Networking:** A peer-to-peer networking protocol for decentralized communication between nodes.
-- **Web UI:** A user interface for interacting with the blockchain and monitoring network status.
+An AI-powered coding assistant similar to Devin AI that can generate code, create projects, execute code, and manage files across multiple programming languages.
+
+## Features
+
+- **AI Chat Interface** - Interactive chat with AI for code generation, debugging, and explanations
+- **Multi-Language Support** - Python, JavaScript, TypeScript, Go, Rust, Java, C++, Ruby, PHP, and more
+- **Project Scaffolding** - Create complete projects from templates (FastAPI, Express, React, Go API, Rust CLI, etc.)
+- **Code Execution** - Run code directly in the browser with real-time output
+- **File Management** - Create, edit, delete, and browse project files
+- **Code Editor** - Syntax-highlighted code viewer with editing capabilities
+- **Terminal Panel** - Execute code in multiple languages with output display
+
+## Architecture
+
+### Backend (FastAPI + Python)
+- `backend/app/main.py` - FastAPI application with CORS
+- `backend/app/routers/` - API routes (chat, files, execute, projects)
+- `backend/app/services/` - Business logic (AI, file management, code execution, project scaffolding)
+- `backend/app/models/` - Pydantic schemas
+
+### Frontend (React + TypeScript + Tailwind CSS)
+- `frontend/src/App.tsx` - Main application layout
+- `frontend/src/components/` - UI components (ChatMessage, ChatInput, Sidebar, TerminalPanel, CodeViewer, ProjectCreator)
+- `frontend/src/services/` - API client
+- `frontend/src/types/` - TypeScript type definitions
 
 ## Setup Instructions
-1. **Clone the Repository**  
-   To get started, clone the repository to your local machine:
-   ```bash
-   git clone https://github.com/AHMED2738175/alg-network.git
-   cd alg-network
-   ```
 
-2. **Install Dependencies**  
-   Use the package manager to install required dependencies:
-   ```bash
-   npm install
-   ```
+### Prerequisites
+- Python 3.12+
+- Node.js 18+
+- Poetry (Python package manager)
 
-3. **Configuration**  
-   Set up your environment variables in a `.env` file:
-   ```bash
-   touch .env
-   nano .env
-   ```
-   Include necessary configuration settings like database URI, port number, etc.
+### Backend Setup
+```bash
+cd backend
+poetry install
+# Create .env file with your OpenAI API key (optional - works with demo mode without it)
+echo "OPENAI_API_KEY=your-key-here" > .env
+poetry run fastapi dev app/main.py --port 8000
+```
 
-4. **Run the Application**  
-   Start the server and initialize the blockchain network:
-   ```bash
-   npm start
-   ```
-   Access the web UI at `http://localhost:3000`.
+### Frontend Setup
+```bash
+cd frontend
+npm install
+echo "VITE_API_URL=http://localhost:8000" > .env
+npm run dev
+```
 
-## Project Structure
-- `src/`
-  - `wallet/`: Contains wallet management logic.
-  - `validators/`: Logic for the validator nodes.
-  - `network/`: Handles peer-to-peer communication protocols.
-  - `ui/`: Web UI components.
-  - `config/`: Configuration files and constants.
-- `tests/`: Unit and integration tests for the project.
-- `docs/`: Documentation files.
+Access the app at `http://localhost:5173`
 
-For more details on each aspect, refer to the respective directories and their README files.
+## API Endpoints
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/chat/` | POST | Send messages to AI assistant |
+| `/api/files/` | GET | List files in workspace |
+| `/api/files/read` | GET | Read file content |
+| `/api/files/write` | POST | Create/update a file |
+| `/api/execute/` | POST | Execute code |
+| `/api/projects/` | POST | Create a new project from template |
+| `/api/projects/templates` | GET | List available templates |
+| `/api/projects/languages` | GET | List supported languages |
+
+## Supported Languages & Templates
+
+| Language | Templates |
+|---|---|
+| Python | FastAPI, Flask, Script |
+| JavaScript | Express, Vanilla |
+| TypeScript | React, Node |
+| Go | API, CLI |
+| Rust | CLI |
+| Java | App |
+
+## License
+
+MIT

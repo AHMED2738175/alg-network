@@ -25,6 +25,7 @@ function App() {
   const [showCodeViewer, setShowCodeViewer] = useState(false);
   const [showProjectCreator, setShowProjectCreator] = useState(false);
   const [insertedCode, setInsertedCode] = useState<{ code: string; language: string } | null>(null);
+  const [pendingTerminalCode, setPendingTerminalCode] = useState<{ code: string; language: string } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -72,14 +73,9 @@ function App() {
     setIsLoading(false);
   };
 
-  const handleRunCode = (code: string, _language: string) => {
+  const handleRunCode = (code: string, language: string) => {
     setTerminalExpanded(true);
-    const terminalPanel = document.querySelector('textarea[placeholder="Enter code to execute..."]') as HTMLTextAreaElement;
-    if (terminalPanel) {
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set;
-      nativeInputValueSetter?.call(terminalPanel, code);
-      terminalPanel.dispatchEvent(new Event('input', { bubbles: true }));
-    }
+    setPendingTerminalCode({ code, language });
   };
 
   const handleInsertCode = (code: string, language: string) => {
@@ -170,6 +166,8 @@ function App() {
         <TerminalPanel
           isExpanded={terminalExpanded}
           onToggle={() => setTerminalExpanded(!terminalExpanded)}
+          pendingCode={pendingTerminalCode}
+          onCodeConsumed={() => setPendingTerminalCode(null)}
         />
       </div>
 

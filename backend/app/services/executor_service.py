@@ -94,7 +94,7 @@ async def execute_code(code: str, language: str, timeout: int = 30) -> dict:
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
                 cwd=tmp_dir,
-                env={**os.environ, "TMPDIR": tmp_dir}
+                env={"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "HOME": tmp_dir, "TMPDIR": tmp_dir, "LANG": os.environ.get("LANG", "C.UTF-8")}
             )
 
             stdout, stderr = await asyncio.wait_for(

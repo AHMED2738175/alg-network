@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Play, Loader2, Terminal, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 import { executeAPI } from '../services/api';
 import type { ExecutionResult } from '../types';
@@ -8,11 +8,21 @@ interface Props {
   initialLanguage?: string;
   isExpanded: boolean;
   onToggle: () => void;
+  pendingCode?: { code: string; language: string } | null;
+  onCodeConsumed?: () => void;
 }
 
-export default function TerminalPanel({ initialCode, initialLanguage, isExpanded, onToggle }: Props) {
+export default function TerminalPanel({ initialCode, initialLanguage, isExpanded, onToggle, pendingCode, onCodeConsumed }: Props) {
   const [code, setCode] = useState(initialCode || '');
   const [language, setLanguage] = useState(initialLanguage || 'python');
+
+  useEffect(() => {
+    if (pendingCode && isExpanded) {
+      setCode(pendingCode.code);
+      setLanguage(pendingCode.language);
+      onCodeConsumed?.();
+    }
+  }, [pendingCode, isExpanded, onCodeConsumed]);
   const [result, setResult] = useState<ExecutionResult | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [history, setHistory] = useState<{ code: string; language: string; result: ExecutionResult }[]>([]);

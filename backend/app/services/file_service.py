@@ -54,7 +54,7 @@ def get_language(file_path: str) -> str:
 def get_safe_path(path: str) -> Path:
     safe = WORKSPACE_DIR / path.lstrip("/")
     resolved = safe.resolve()
-    if not str(resolved).startswith(str(WORKSPACE_DIR.resolve())):
+    if not str(resolved).startswith(str(WORKSPACE_DIR.resolve()) + os.sep) and resolved != WORKSPACE_DIR.resolve():
         raise ValueError("Path traversal detected")
     return resolved
 
